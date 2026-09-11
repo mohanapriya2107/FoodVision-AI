@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Food Classification - Results</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f3f6fb;
+            color: #172033;
+            min-height: 100vh;
+        }
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .header {
+
+            height: 58px;
+
+            background: linear-gradient(
+                135deg,
+                #173f9e,
+                #2865df
+            );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.12);
+        }
+
+
+        /* =========================================
+           MAIN GRID
+        ========================================= */
+
+        .main {
+
+            width: 95%;
+
+            max-width: 1450px;
+
+            margin: 25px auto;
+
+            display: grid;
+
+            grid-template-columns:
+                250px
+                minmax(500px, 1fr)
+                300px;
+
+            gap: 22px;
+
+            align-items: stretch;
+        }
+
+
+        /* =========================================
+           COMMON CARD
+        ========================================= */
+
+        .card {
+
+            background: white;
+
+            border: 1px solid #e1e8f2;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 8px 25px rgba(30,60,100,0.08);
+        }
+
+
+        /* =========================================
+           LEFT PROFILE CARD
+        ========================================= */
+
+        .profile-card {
+
+            padding: 22px 18px;
+
+            text-align: center;
+        }
+
+
+        .profile-image {
+
+            width: 105px;
+            height: 105px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border: 4px solid #2870e8;
+
+            box-shadow:
+                0 5px 18px rgba(40,112,232,0.20);
+
+            margin-bottom: 12px;
+        }
+
+
+        .profile-name {
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            color: #172033;
+
+            margin-bottom: 5px;
+        }
+
+
+        .profile-designation {
+
+            font-size: 14px;
+
+            color: #718096;
+
+            margin-bottom: 22px;
+        }
+
+
+        .profile-line {
+
+            width: 55px;
+            height: 3px;
+
+            background: #2870e8;
+
+            border-radius: 5px;
+
+            margin: 0 auto 22px;
+        }
+
+
+        /* =========================================
+           IMAGE SECTIONS
+        ========================================= */
+
+        .image-section {
+
+            text-align: left;
+
+            margin-bottom: 20px;
+        }
+
+
+        .image-title {
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: #46618a;
+
+            letter-spacing: 0.5px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .result-image-box {
+
+            width: 100%;
+
+            height: 125px;
+
+            border-radius: 12px;
+
+            border: 1px solid #dce5f0;
+
+            background: #f5f8fc;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+
+        .result-image {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+        }
+
+
+        .image-placeholder {
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            font-size: 12px;
+
+            padding: 10px;
+        }
+
+
+        .predicted-label {
+
+            text-align: center;
+
+            margin-top: 7px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: #205dcc;
+        }
+
+
+        /* =========================================
+           MIDDLE PREDICTION CARD
+        ========================================= */
+
+        .prediction-card {
+
+            padding: 28px 35px;
+
+            text-align: center;
+        }
+
+
+        .prediction-heading {
+
+            font-size: 17px;
+
+            color: #46618a;
+
+            font-weight: 700;
+
+            letter-spacing: 0.5px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .model-badge {
+
+            display: inline-block;
+
+            padding: 8px 20px;
+
+            border-radius: 25px;
+
+            border: 1px solid #bcd6ff;
+
+            background: #f0f6ff;
+
+            color: #1d5fd0;
+
+            font-weight: 700;
+
+            font-size: 13px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================================
+           PREDICTED IMAGE
+        ========================================= */
+
+        .predicted-food-image-box {
+
+            width: 180px;
+            height: 180px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 50%;
+
+            background: #edf4ff;
+
+            border: 8px solid #edf4ff;
+
+            box-shadow:
+                0 8px 25px rgba(39,100,220,0.12);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+
+        .predicted-food-image {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+        }
+
+
+        .predicted-food-placeholder {
+
+            font-size: 65px;
+        }
+
+
+        .prediction-label {
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .predicted-class {
+
+            color: #205dcc;
+
+            font-size: 38px;
+
+            font-weight: 800;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================================
+           CONFIDENCE
+        ========================================= */
+
+        .confidence-card {
+
+            background: #f7f9fc;
+
+            border: 1px solid #e4eaf2;
+
+            border-radius: 14px;
+
+            padding: 17px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .confidence-title {
+
+            font-size: 13px;
+
+            color: #64748b;
+
+            margin-bottom: 10px;
+        }
+
+
+        .confidence-value {
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            color: #16a05d;
+        }
+
+
+        .confidence-bar {
+
+            height: 8px;
+
+            background: #e2e8f0;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            margin-top: 12px;
+        }
+
+
+        .confidence-fill {
+
+            height: 100%;
+
+            width: 0%;
+
+            background: linear-gradient(
+                90deg,
+                #20b66c,
+                #18a45d
+            );
+
+            transition: width 0.6s ease;
+        }
+
+
+        /* =========================================
+           NUTRITION
+        ========================================= */
+
+        .nutrition-card {
+
+            border: 1px solid #dce5f0;
+
+            border-radius: 14px;
+
+            background: #f8fafc;
+
+            padding: 17px;
+
+            text-align: left;
+        }
+
+
+        .nutrition-title {
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            margin-bottom: 13px;
+
+            color: #172033;
+        }
+
+
+        .nutrition-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 8px;
+        }
+
+
+        .nutrition-item {
+
+            background: white;
+
+            border: 1px solid #e6ebf2;
+
+            border-radius: 9px;
+
+            padding: 10px;
+        }
+
+
+        .nutrition-name {
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: #1e385c;
+        }
+
+
+        .nutrition-value {
+
+            font-size: 12px;
+
+            color: #64748b;
+
+            margin-top: 3px;
+        }
+
+
+        /* =========================================
+           RIGHT METRICS
+        ========================================= */
+
+        .metrics-card {
+
+            padding: 22px;
+        }
+
+
+        .metrics-title {
+
+            font-size: 21px;
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+        }
+
+
+        .metrics-description {
+
+            color: #718096;
+
+            font-size: 12px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .metric-section {
+
+            border: 1px solid #dce5f0;
+
+            border-radius: 13px;
+
+            overflow: hidden;
+
+            margin-bottom: 20px;
+        }
+
+
+        .metric-header {
+
+            padding: 12px;
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+
+        .actual-header {
+
+            background: #edf4ff;
+
+            color: #1759c4;
+        }
+
+
+        .predicted-header {
+
+            background: #edfbf2;
+
+            color: #087a40;
+        }
+
+
+        .metric-class-name {
+
+            padding: 11px 12px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            border-bottom: 1px solid #e4e9ef;
+        }
+
+
+        .metric-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 11px 12px;
+
+            border-bottom: 1px solid #e4e9ef;
+
+            font-size: 12px;
+        }
+
+
+        .metric-row:last-child {
+
+            border-bottom: none;
+        }
+
+
+        .metric-label {
+
+            color: #718096;
+        }
+
+
+        .metric-value {
+
+            font-weight: 700;
+
+            color: #172033;
+        }
+
+
+        .not-available {
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            padding: 12px;
+        }
+
+
+        /* =========================================
+           BACK BUTTON
+        ========================================= */
+
+        .back-button {
+
+            display: block;
+
+            width: 95%;
+
+            max-width: 1450px;
+
+            margin: 0 auto 25px;
+
+            text-align: center;
+        }
+
+
+        .back-button a {
+
+            display: inline-block;
+
+            padding: 10px 22px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            background: #2865df;
+
+            color: white;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        .back-button a:hover {
+
+            background: #174fbf;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 1050px) {
+
+            .main {
+
+                grid-template-columns:
+                    220px
+                    1fr;
+
+            }
+
+            .metrics-card {
+
+                grid-column: 1 / -1;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .main {
+
+                grid-template-columns: 1fr;
+
+                width: 94%;
+            }
+
+            .metrics-card {
+
+                grid-column: auto;
+            }
+
+            .prediction-card {
+
+                padding: 22px 18px;
+            }
+
+            .predicted-class {
+
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<header class="header">
+
+    AI-Based Food Recognition System
+
+</header>
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main class="main">
+
+
+    <!-- =====================================
+         LEFT
+    ====================================== -->
+
+    <section class="card profile-card">
+
+
+        <!-- YOUR PHOTO -->
+
+        <img
+            src="/static/images/mohana_priya.jpg"
+            alt="Mohana Priya"
+            class="profile-image"
+            onerror="this.style.display='none';"
+        >
+
+
+        <h2 class="profile-name">
+            Mohana Priya
+        </h2>
+
+
+        <p class="profile-designation">
+            Data Scientist
+        </p>
+
+
+        <div class="profile-line"></div>
+
+
+        <!-- ACTUAL / UPLOADED IMAGE -->
+
+        <div class="image-section">
+
+            <div class="image-title">
+                ACTUAL IMAGE
+            </div>
+
+            <div class="result-image-box">
+
+                <img
+                    id="actualImage"
+                    class="result-image"
+                    alt="Uploaded food image"
+                >
+
+                <div
+                    id="actualImagePlaceholder"
+                    class="image-placeholder"
+                >
+                    Uploaded image
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PREDICTED FOOD IMAGE -->
+
+        <div class="image-section">
+
+            <div class="image-title">
+                PREDICTED CLASS IMAGE
+            </div>
+
+
+            <div class="result-image-box">
+
+                <img
+                    id="predictedImage"
+                    class="result-image"
+                    alt="Predicted food"
+                    style="display:none;"
+                >
+
+
+                <div
+                    id="predictedImagePlaceholder"
+                    class="image-placeholder"
+                >
+                    Food image not available
+                </div>
+
+            </div>
+
+
+            <div
+                id="predictedImageLabel"
+                class="predicted-label"
+            ></div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================
+         MIDDLE
+    ====================================== -->
+
+    <section class="card prediction-card">
+
+
+        <div class="prediction-heading">
+            FOOD PREDICTION
+        </div>
+
+
+        <div
+            id="modelBadge"
+            class="model-badge"
+        >
+            CNN
+        </div>
+
+
+        <!-- PREDICTED FOOD IMAGE -->
+
+        <div class="predicted-food-image-box">
+
+            <img
+                id="middlePredictedImage"
+                class="predicted-food-image"
+                style="display:none;"
+                alt="Predicted food"
+            >
+
+            <div
+                id="middleImagePlaceholder"
+                class="predicted-food-placeholder"
+            >
+                🍽️
+            </div>
+
+        </div>
+
+
+        <div class="prediction-label">
+            PREDICTED FOOD
+        </div>
+
+
+        <div
+            id="predictedClass"
+            class="predicted-class"
+        >
+            --
+        </div>
+
+
+        <!-- CONFIDENCE -->
+
+        <div class="confidence-card">
+
+
+            <div class="confidence-title">
+                Prediction Confidence
+            </div>
+
+
+            <div
+                id="confidenceValue"
+                class="confidence-value"
+            >
+                --
+            </div>
+
+
+            <div class="confidence-bar">
+
+                <div
+                    id="confidenceFill"
+                    class="confidence-fill"
+                ></div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- NUTRITION -->
+
+        <div class="nutrition-card">
+
+
+            <div class="nutrition-title">
+                Nutrition Information
+            </div>
+
+
+            <div
+                id="nutritionGrid"
+                class="nutrition-grid"
+            >
+
+                <div class="nutrition-item">
+
+                    <div class="nutrition-name">
+                        Information
+                    </div>
+
+                    <div class="nutrition-value">
+                        Not available
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================
+         RIGHT
+    ====================================== -->
+
+    <section class="card metrics-card">
+
+
+        <h2 class="metrics-title">
+            Performance Metrics
+        </h2>
+
+
+        <p class="metrics-description">
+            Class-wise performance for the selected model
+        </p>
+
+
+        <!-- ACTUAL CLASS -->
+
+        <div class="metric-section">
+
+
+            <div class="metric-header actual-header">
+                Actual Class
+            </div>
+
+
+            <div
+                id="actualClassName"
+                class="metric-class-name"
+            >
+                Not Available
+            </div>
+
+
+            <div
+                id="actualMetrics"
+            >
+
+                <div class="not-available">
+                    Actual class cannot be determined
+                    automatically from the uploaded image.
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- PREDICTED CLASS -->
+
+        <div class="metric-section">
+
+
+            <div class="metric-header predicted-header">
+                Predicted Class
+            </div>
+
+
+            <div
+                id="predictedMetricClass"
+                class="metric-class-name"
+            >
+                --
+            </div>
+
+
+            <div
+                id="predictedMetrics"
+            >
+
+                <div class="not-available">
+                    Metrics not available
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+<!-- =========================================
+     BACK
+========================================= -->
+
+<div class="back-button">
+
+    <a href="/">
+        ← Back to Prediction
+    </a>
+
+</div>
+
+
+
+<script>
+
+    /* =========================================
+       GET RESULT FROM SESSION STORAGE
+    ========================================= */
+
+    const storedResult =
+    sessionStorage.getItem("predictionResult");
+
+
+    if (!storedResult) {
+
+        alert("Prediction result not found.");
+
+        window.location.href = "/";
+
+    }
+
+
+    let result = {};
+
+    try {
+
+        result = JSON.parse(storedResult);
+
+    }
+    catch (error) {
+
+        console.error(
+            "Could not parse prediction result:",
+            error
+        );
+
+    }
+
+
+    const uploadedImage =
+        result.uploaded_image;
+
+
+    /* =========================================
+       BASIC RESULT DATA
+    ========================================= */
+
+    const predictedClass =
+        result.predicted_class || "--";
+
+
+    const model =
+        result.model || "cnn";
+
+
+    /* =========================================
+       MODEL NAME
+    ========================================= */
+
+    const modelNames = {
+
+        cnn: "CNN",
+
+        vgg16: "VGG16",
+
+        resnet50: "ResNet50"
+
+    };
+
+
+    document.getElementById(
+        "modelBadge"
+    ).textContent =
+        modelNames[model] || model.toUpperCase();
+
+
+    /* =========================================
+       PREDICTED CLASS
+    ========================================= */
+
+    document.getElementById(
+        "predictedClass"
+    ).textContent =
+        predictedClass;
+
+
+    document.getElementById(
+        "predictedMetricClass"
+    ).textContent =
+        predictedClass;
+
+
+    document.getElementById(
+        "predictedImageLabel"
+    ).textContent =
+        predictedClass;
+
+
+    /* =========================================
+       ACTUAL / UPLOADED IMAGE
+    ========================================= */
+
+    if (uploadedImage) {
+
+        const actualImage =
+            document.getElementById(
+                "actualImage"
+            );
+
+
+        actualImage.src =
+            uploadedImage;
+
+
+        actualImage.style.display =
+            "block";
+
+
+        document.getElementById(
+            "actualImagePlaceholder"
+        ).style.display =
+            "none";
+
+    }
+
+
+    /* =========================================
+       PREDICTED IMAGE
+
+       This expects:
+
+       /static/food_images/
+
+       Example:
+
+       static/food_images/donut.jpg
+    ========================================= */
+
+    const predictedImageUrl =
+    result.food_image || "";
+
+
+    function loadPredictedImage(
+        imageElementId,
+        placeholderId
+    ) {
+
+        const img =
+            document.getElementById(
+                imageElementId
+            );
+
+
+        const placeholder =
+            document.getElementById(
+                placeholderId
+            );
+
+
+        img.onload = function () {
+
+            img.style.display =
+                "block";
+
+            placeholder.style.display =
+                "none";
+
+        };
+
+
+        img.onerror = function () {
+
+            img.style.display =
+                "none";
+
+            placeholder.style.display =
+                "block";
+
+        };
+
+
+        img.src =
+            predictedImageUrl;
+
+    }
+
+
+    loadPredictedImage(
+        "predictedImage",
+        "predictedImagePlaceholder"
+    );
+
+
+    loadPredictedImage(
+        "middlePredictedImage",
+        "middleImagePlaceholder"
+    );
+
+
+    /* =========================================
+       CONFIDENCE
+
+       Your current Flask backend does NOT
+       return confidence.
+
+       So show -- unless confidence is added.
+    ========================================= */
+
+    let confidence = null;
+
+
+    if (
+        result.confidence !== undefined &&
+        result.confidence !== null
+    ) {
+
+        confidence =
+            Number(result.confidence);
+
+    }
+
+
+    if (confidence !== null &&
+        !isNaN(confidence)) {
+
+
+        if (confidence <= 1) {
+
+            confidence =
+                confidence * 100;
+
+        }
+
+
+        confidence =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    confidence
+                )
+            );
+
+
+        document.getElementById(
+            "confidenceValue"
+        ).textContent =
+            confidence.toFixed(2) + "%";
+
+
+        document.getElementById(
+            "confidenceFill"
+        ).style.width =
+            confidence + "%";
+
+    }
+    else {
+
+        document.getElementById(
+            "confidenceValue"
+        ).textContent =
+            "--";
+
+    }
+
+
+    /* =========================================
+       METRIC FORMATTER
+    ========================================= */
+
+    function formatMetric(
+        value,
+        metricName
+    ) {
+
+        if (
+            value === undefined ||
+            value === null ||
+            value === ""
+        ) {
+
+            return "--";
+
+        }
+
+
+        const numericValue =
+            Number(value);
+
+
+        if (
+            !isNaN(numericValue)
+        ) {
+
+            if (
+                metricName === "support"
+            ) {
+
+                return Math.round(
+                    numericValue
+                ).toString();
+
+            }
+
+
+            if (
+                metricName === "precision" ||
+                metricName === "recall" ||
+                metricName === "f1_score" ||
+                metricName === "f1" ||
+                metricName === "accuracy"
+            ) {
+
+                if (
+                    numericValue <= 1
+                ) {
+
+                    return (
+                        numericValue * 100
+                    ).toFixed(2) + "%";
+
+                }
+
+
+                return (
+                    numericValue
+                ).toFixed(2) + "%";
+
+            }
+
+
+            return numericValue.toFixed(2);
+
+        }
+
+
+        return value;
+
+    }
+
+
+    /* =========================================
+       DISPLAY METRICS
+    ========================================= */
+
+    function displayMetrics(
+        containerId,
+        metrics
+    ) {
+
+        const container =
+            document.getElementById(
+                containerId
+            );
+
+
+        if (
+            !metrics ||
+            Object.keys(metrics).length === 0
+        ) {
+
+            container.innerHTML =
+
+                '<div class="not-available">' +
+
+                'Metrics not available' +
+
+                '</div>';
+
+            return;
+
+        }
+
+
+        const metricNames = {
+
+            precision: "Precision",
+
+            recall: "Recall",
+
+            f1_score: "F1 Score",
+
+            f1: "F1 Score",
+
+            accuracy: "Accuracy",
+
+            support: "Support"
+
+        };
+
+
+        container.innerHTML = "";
+
+
+        Object.keys(metrics).forEach(
+            function (key) {
+
+
+                const value =
+                    metrics[key];
+
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                row.className =
+                    "metric-row";
+
+
+                const label =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                label.className =
+                    "metric-label";
+
+
+                label.textContent =
+                    metricNames[key] ||
+                    key
+                        .replace(/_/g, " ")
+                        .replace(
+                            /\b\w/g,
+                            function (letter) {
+                                return letter.toUpperCase();
+                            }
+                        );
+
+
+                const metricValue =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                metricValue.className =
+                    "metric-value";
+
+
+                metricValue.textContent =
+                    formatMetric(value,key);
+
+
+                row.appendChild(label);
+
+                row.appendChild(
+                    metricValue
+                );
+
+
+                container.appendChild(
+                    row
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================
+       ACTUAL CLASS + ACTUAL METRICS
+    ========================================= */
+
+    const actualClassName =
+        document.getElementById(
+            "actualClassName"
+        );
+
+    const actualMetricsContainer =
+        document.getElementById(
+            "actualMetrics"
+        );
+
+
+    if (
+        result.actual_class !== null &&
+        result.actual_class !== undefined &&
+        result.actual_class !== ""
+    ) {
+
+        actualClassName.textContent =
+            result.actual_class;
+
+
+        if (
+            result.actual_metrics &&
+            typeof result.actual_metrics === "object" &&
+            Object.keys(
+                result.actual_metrics
+            ).length > 0
+        ) {
+
+            displayMetrics(
+                "actualMetrics",
+                result.actual_metrics
+            );
+
+        }
+        else {
+
+            actualMetricsContainer.innerHTML =
+
+                '<div class="not-available">' +
+
+                'Metrics not found for this class.' +
+
+                '</div>';
+
+        }
+
+    }
+    else {
+
+        actualClassName.textContent =
+            "Not Selected";
+
+
+        actualMetricsContainer.innerHTML =
+
+            '<div class="not-available">' +
+
+            'Please select the actual food class ' +
+            'before prediction.' +
+
+            '</div>';
+
+    }
+
+
+    /* =========================================
+       PREDICTED METRICS
+    ========================================= */
+
+    displayMetrics(
+        "predictedMetrics",
+        result.predicted_metrics
+    );
+
+
+    /* =========================================
+       NUTRITION
+    ========================================= */
+
+    function displayNutrition(
+        nutrition
+    ) {
+
+        const grid =
+            document.getElementById(
+                "nutritionGrid"
+            );
+
+
+        if (
+            !nutrition ||
+            Object.keys(nutrition).length === 0
+        ) {
+
+            grid.innerHTML =
+
+                '<div class="nutrition-item">' +
+
+                '<div class="nutrition-name">' +
+
+                'Information' +
+
+                '</div>' +
+
+                '<div class="nutrition-value">' +
+
+                'Nutrition information not available' +
+
+                '</div>' +
+
+                '</div>';
+
+            return;
+
+        }
+
+
+        grid.innerHTML = "";
+
+
+        Object.entries(
+            nutrition
+        ).forEach(
+            function ([key, value]) {
+
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "nutrition-item";
+
+
+                const name =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                name.className =
+                    "nutrition-name";
+
+
+                name.textContent =
+                    key
+                        .replace(/_/g, " ")
+                        .replace(
+                            /\b\w/g,
+                            function (letter) {
+                                return letter.toUpperCase();
+                            }
+                        );
+
+
+                const nutritionValue =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                nutritionValue.className =
+                    "nutrition-value";
+
+
+                nutritionValue.textContent =
+                    value;
+
+
+                item.appendChild(name);
+
+                item.appendChild(
+                    nutritionValue
+                );
+
+
+                grid.appendChild(item);
+
+            }
+        );
+
+    }
+
+
+    displayNutrition(
+        result.nutrition
+    );
+
+</script>
+
+
+</body>
+
+</html>

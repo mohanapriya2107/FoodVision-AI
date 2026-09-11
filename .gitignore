@@ -1,0 +1,31 @@
+# Python
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# Dataset
+Food Classification dataset/
+food/
+food.zip
+archive (1).zip
+
+# Uploaded images
+uploads/
+
+# Environment/secrets
+.env
+.env.*
+
+# IDE
+.idea/
+.vscode/
+
+# Logs/cache
+*.log
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
