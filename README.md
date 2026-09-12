@@ -1,177 +1,131 @@
-# 🍽️ FoodVision AI — AI-Based Food Recognition & Nutrition System
+🍔 FoodVision AIAn intelligent deep learning web application that predicts food items from images, providing real-time food classification, confidence scores, nutritional details, and comprehensive model performance metrics across multiple deep learning architectures.The system automates the complete computer vision pipeline—from image preprocessing and feature extraction to real-time model inference and Redis-backed nutritional data retrieval.📌 Project OverviewFood recognition using computer vision plays a critical role in automated nutrition tracking, dietary management, smart health applications, and food industry automation.FoodVision AI helps users instantly identify food categories from uploaded images while offering deeper insights into nutritional values and deep learning model reliability.The application is built using:PythonTensorFlow / KerasFlaskRedisNumPyPandasHTMLCSSJavaScript🚀 Features🍽️ Food Image Classification: Accurately classifies food items across 34 distinct classes.🤖 Multi-Model Engine: Support for Custom CNN, VGG16, and ResNet50 architectures.🎯 Probability &amp; Confidence Scoring: Generates confidence scores for every prediction.🥗 Nutritional Information Retrieval: Retrieves instant nutritional details using Redis in-memory storage.📊 Model Performance Metrics: Live evaluation displays class-wise Precision, Recall, F1-Score, and Accuracy.📷 Image Upload &amp; Preview: Supports user image upload with real-time web previews.🖼️ Dynamic Food Image Mapping: Displays representative static reference images alongside user uploads.🌐 Flask Web Interface: Clean, interactive UI for effortless user interaction.⚡ Real-time Prediction: Low-latency inference pipeline built for high responsiveness.🍴 Supported Food ClassesFoodVision AI currently supports 34 food categories:Plaintext1.  Baked Potato          13. Chapati               25. Kulfi
+2.  Crispy Chicken        14. Cheesecake            26. Masala Dosa
+3.  Donut                 15. Chicken Curry         27. Momos
+4.  Fries                 16. Chole Bhature         28. Omelette
+5.  Hot Dog               17. Dal Makhani           29. Paani Puri
+6.  Sandwich              18. Dhokla                30. Pakode
+7.  Taco                  19. Fried Rice            31. Pav Bhaji
+8.  Taquito               20. Ice Cream             32. Pizza
+9.  Apple Pie             21. Idli                  33. Samosa
+10. Burger                22. Jalebi                34. Sushi
+11. Butter Naan           23. Kaathi Rolls
+12. Chai                  24. Kadai Paneer
+🧠 Machine Learning Workflow1. Data CollectionThe system is trained on a structured dataset containing 34 food categories with a balanced distribution across sets:PlaintextTraining Set   : 8,500 images  (250 per class)
+Validation Set :   680 images  (20 per class)
+Testing Set    : 1,700 images  (50 per class)
+----------------------------------------------
+Total Dataset  : 10,880 images
+2. Data Cleaning &amp; PreprocessingImage Resizing: Rescaled to standardized input sizes (256 × 256 × 3).Color Space Conversion: Standardized to RGB format across all input images.Pixel Normalization: Normalized pixel values to standard ranges suited for transfer learning backbones.Batch Preparation: Grouped into batches with shuffle and prefetch pipelines for efficient GPU training.
 
-> An end-to-end deep learning application that recognizes food from images, compares multiple CNN-based models, predicts the food category with confidence, and retrieves corresponding nutritional information using Redis.
+          
+            
+          
+        
+  
+        
+    
 
----
+3. Deep Learning ArchitecturesCustom CNNDesigned from scratch with alternating Convolutional, ReLU activation, MaxPooling, and Dropout layers.Optimized for lightweight deployment and quick local inference.Saved Model: models/custom_cnn.kerasVGG16Transfer learning setup utilizing deep stacked 3x3 convolutional blocks pre-trained on ImageNet.Captures rich visual features ranging from basic edges to complex visual food textures.Saved Model: models/vgg16.kerasResNet50Deep Residual Network leveraging skip connections to prevent vanishing gradients during deep feature extraction.Achieves high top-1 accuracy on nuanced food categories.Saved Model: models/resnet_model.keras📊 Model Evaluation &amp; MetricsEach trained model is rigorously evaluated on the test set (1,700 unseen images). The system tracks the following key classification metrics:Accuracy: Percentage of overall correct classifications.Precision: Ratio of correctly predicted positive observations to total predicted positives.Recall: Ratio of correctly predicted positive observations to all observations in actual class.F1 Score: Weighted average of Precision and Recall.Model ArchitectureAccuracyPrecisionRecallF1 ScoreCustom CNN[Add Value][Add Value][Add Value][Add Value]VGG16[Add Value][Add Value][Add Value][Add Value]ResNet50[Add Value][Add Value][Add Value][Add Value]💾 Model &amp; File AssetsPlaintextmodels/custom_cnn.keras         → Custom CNN Architecture Weights &amp; Pipeline
+models/vgg16.keras              → VGG16 Transfer Learning Model
+models/resnet_model.keras       → ResNet50 Transfer Learning Model
+metrics/custom_cnn_metrics.json → Class-wise Performance Metrics (CNN)
+metrics/vgg16_metrics.json      → Class-wise Performance Metrics (VGG16)
+metrics/resnet50_metrics.json   → Class-wise Performance Metrics (ResNet50)
+data/food.json                  → Food Master File (Nutritional Data)
+🌐 Deployment &amp; Prediction WorkflowPlaintext       User Uploads Image
+               │
+               ▼
+   Selected Deep Learning Model
+    (Custom CNN / VGG16 / ResNet50)
+               │
+               ▼
+   Image Validation &amp; Resizing
+               │
+               ▼
+      Pixel Normalization
+               │
+               ▼
+      Model Inference Engine
+               │
+               ▼
+   Predicted Food Class + Confidence Score
+               │
+               ▼
+ Redis In-Memory Lookup (food_data &amp; metrics)
+               │
+               ▼
+ Comprehensive Prediction &amp; Nutrition Output
+🗃️ Redis IntegrationRedis serves as an in-memory key-value store providing instant access to nutrition data and model metrics without repeated disk read latency.Food Data Store: Stored under key food_data as JSON.Model Performance Store: Stored under keys custom_cnn_metrics, vgg16_metrics, and resnet50_metrics.Loading Data into RedisPythonimport redis
+import json
 
-## 📌 Project Overview
+redis_client = redis.Redis(host="localhost", port=6379, db=0, decode_responses=True)
 
-**FoodVision AI** is an end-to-end image classification system designed to recognize food items from uploaded images.
+# Load Food Data
+with open("data/food.json", "r", encoding="utf-8") as file:
+    food_data = json.load(file)
+redis_client.set("food_data", json.dumps(food_data))
 
-The project combines:
+print("Data loaded into Redis successfully.")
+📂 Project StructurePlaintextFoodVision-AI
+│
+├── app.py
+├── prediction.py
+├── requirements.txt
+├── README.md
+│
+├── models/
+│   ├── custom_cnn.keras
+│   ├── vgg16.keras
+│   └── resnet_model.keras
+│
+├── metrics/
+│   ├── custom_cnn_metrics.json
+│   ├── vgg16_metrics.json
+│   └── resnet50_metrics.json
+│
+├── templates/
+│   ├── index.html
+│   └── results.html
+│
+├── static/
+│   ├── style.css
+│   ├── script.js
+│   ├── food_images/
+│   └── screenshots/
+│
+└── data/
+    └── food.json
+⚙️ Technologies UsedProgramming Language: PythonDeep Learning: TensorFlow, Keras (CNN, VGG16, ResNet50)Data Processing: NumPy, PandasBackend: FlaskIn-Memory Store: RedisFrontend: HTML5, CSS3, JavaScriptVersion Control: Git, Git LFS (for .keras files)📦 Installation &amp; Setup1. Clone the RepositoryBashgit clone https://github.com/mohanapriya2107/FoodVision-AI.git
+cd FoodVision-AI
 
-- 🧠 Deep Learning
-- 🖼️ Image Classification
-- 📊 Model Evaluation
-- ⚡ Redis-based Data Retrieval
-- 🌐 Flask REST Backend
-- 💻 HTML, CSS & JavaScript Frontend
-- 🥗 Nutrition Information Retrieval
 
-The system supports **34 different food categories** and evaluates three different deep learning approaches:
+          
+            
+          
+        
+  
+        
+    
 
-1. **Custom CNN**
-2. **VGG16**
-3. **ResNet50**
+2. Set Up Virtual EnvironmentBashpython -m venv venv
 
-Users can upload a food image through the web interface, select a trained model, receive the predicted food class and confidence score, and view nutritional information associated with the prediction.
+# Windows
+venv\Scripts\activate
 
----
+# Linux / macOS
+source venv/bin/activate
+3. Install DependenciesBashpip install -r requirements.txt
+4. Start Redis ServerVerify Redis is active locally:Bashredis-cli ping
+# Output: PONG
 
-## 🎯 Objectives
 
-The main objectives of FoodVision AI are to:
+          
+            
+          
+        
+  
+        
+    
 
-- Build an image classification system for multiple food categories.
-- Train and evaluate different CNN architectures.
-- Compare Custom CNN, VGG16, and ResNet50 performance.
-- Provide food predictions through a web application.
-- Retrieve nutritional information using Redis.
-- Display prediction confidence and model performance.
-- Create a complete end-to-end ML deployment workflow.
-
----
-
-## ✨ Key Features
-
-### 🖼️ Food Image Classification
-Upload a food image and identify the corresponding food category.
-
-### 🧠 Multiple Deep Learning Models
-
-The application supports:
-
-| Model | Description |
-|---|---|
-| Custom CNN | CNN architecture designed specifically for the project |
-| VGG16 | Transfer-learning based convolutional architecture |
-| ResNet50 | Deep residual neural network |
-
-### 📊 Model Performance
-
-The application can display evaluation metrics including:
-
-- Accuracy
-- Precision
-- Recall
-- F1-Score
-- Support
-
-### 🥗 Nutrition Information
-
-After identifying a food item, the system retrieves associated nutrition information stored in Redis.
-
-Depending on the available food entry, information can include:
-
-- Protein
-- Fat
-- Carbohydrates
-- Sodium
-- Cholesterol
-
-### ⚡ Redis Integration
-
-Redis is used as the fast data layer for:
-
-- Food information
-- Nutrition data
-- Model performance metrics
-
-### 🌐 Web Application
-
-The project provides a Flask-based backend and browser-based frontend for interacting with the trained models.
-
-### 📱 User-Friendly Interface
-
-The interface provides:
-
-- Food image upload
-- Model selection
-- Prediction result
-- Confidence score
-- Uploaded image preview
-- Predicted food image
-- Nutrition information
-- Model performance metrics
-
----
-
-# 🍕 Supported Food Classes
-
-The system supports **34 food categories**:
-
-1. Baked Potato
-2. Crispy Chicken
-3. Donut
-4. Fries
-5. Hot Dog
-6. Sandwich
-7. Taco
-8. Taquito
-9. Apple Pie
-10. Burger
-11. Butter Naan
-12. Chai
-13. Chapati
-14. Cheesecake
-15. Chicken Curry
-16. Chole Bhature
-17. Dal Makhani
-18. Dhokla
-19. Fried Rice
-20. Ice Cream
-21. Idli
-22. Jalebi
-23. Kaathi Rolls
-24. Kadai Paneer
-25. Kulfi
-26. Masala Dosa
-27. Momos
-28. Omelette
-29. Paani Puri
-30. Pakode
-31. Pav Bhaji
-32. Pizza
-33. Samosa
-34. Sushi
-
----
-
-# 📂 Dataset
-
-The project uses a structured image dataset containing **34 food classes**.
-
-### Dataset Distribution
-
-Each class contains:
-
-| Dataset | Images per Class | Total Images |
-|---|---:|---:|
-| Training | 250 | 8,500 |
-| Validation | 20 | 680 |
-| Testing | 50 | 1,700 |
-| **Total** | **320** | **10,880** |
-
-### Dataset Split
-
-```text
-Total Images: 10,880
-
-                 Food Dataset
-                      │
-          ┌───────────┼───────────┐
-          ↓           ↓           ↓
-       Training    Validation    Testing
-       8,500         680         1,700
-         │            │            │
-      250/class     20/class     50/class
+5. Run the ApplicationBashpython app.py
+Open your browser and navigate to: [http://127.0.0.1:5000/](http://127.0.0.1:5000/)📈 OutputThe application returns:Identified Food Category (e.g., Samosa, Pizza, Butter Naan)Confidence Score (%) (e.g., 98.4%)Nutritional Breakdown: Calories, Carbs, Proteins, Fats, and FiberModel Class Performance: Precision, Recall, and F1-Score for the predicted class🎯 Future Enhancements📱 Mobile Application Development☁️ Cloud Deployment (AWS / GCP / Heroku)📊 SHAP / Grad-CAM Visual Explainability (Heatmaps)🥗 Personalized Dietary &amp; Macro Recommendations🎯 Top-K Prediction Probabilities Display🧠 Ensemble Model Predictions📷 Live Camera Recognition Support👩‍💻 AuthorMohana Priya KorukoppulaAI &amp; Machine Learning EngineerGitHub: MohanaPriya2107LinkedIn: Mohana Priya Korukoppula
