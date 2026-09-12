@@ -26,10 +26,10 @@ UPLOAD_FOLDER = os.path.join(BASE_DIR,"uploads")
 
 os.makedirs(UPLOAD_FOLDER,exist_ok=True)
 
-redis_client = redis.Redis(
-    host="localhost",
-    port=6379,
-    db=0,
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+
+redis_client = redis.from_url(
+    REDIS_URL,
     decode_responses=True
 )
 
@@ -321,6 +321,23 @@ def health():
             "resnet50"
         ]
     })
+
+@app.route("/redis-test")
+def redis_test():
+    try:
+        redis_client.ping()
+
+        return {
+            "status": "success",
+            "message": "Redis connected successfully"
+        }
+
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }, 500
+
 if __name__ == "__main__":
     print("http://127.0.0.1:5000")
     app.run(host="0.0.0.0",
